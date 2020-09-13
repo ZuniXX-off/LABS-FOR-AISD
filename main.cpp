@@ -4,8 +4,58 @@
 
 const short SHIFT = 192;
 const short LENOFLETTERS = 32;
+const int ONE = 1;
 
 using namespace std;
+
+#pragma region set
+
+bool isInSet(unsigned char item, unsigned char* set) {
+    for (size_t i = 0; set[i]; ++i) {
+        if (set[i] == item) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void DeleteItem(int index, unsigned char* set) {
+    for (size_t i = index; set[i]; ++i) {
+        set[i] = set[i + 1];
+    }
+}
+
+void AddItem(unsigned char item, unsigned char* set) {
+    size_t i;
+    for (i = 0; set[i]; ++i);
+    set[i] = item;
+    set[i + 1] = 0;
+}
+
+void UnionSets(unsigned char* source, unsigned char* destination) {
+    for (size_t i = 0; source[i]; ++i) {
+        if (!isInSet(source[i], destination)) {
+            AddItem(source[i], destination);
+        }
+    }
+}
+
+void ExclusionSets(unsigned char* source, unsigned char* destination) {
+    for (size_t i = 0; source[i]; ++i) {
+        if (isInSet(source[i], destination)) {
+            DeleteItem(i, destination);
+        }
+    }
+}
+
+void PrintSet(unsigned char* set) {
+    for (size_t i = 0; set[i]; ++i) {
+        cout << set[i];
+    }
+}
+
+#pragma endregion all what neded for set
 
 #pragma region list
 
@@ -95,7 +145,7 @@ void PrintSet(ST* set) {
 
 #pragma endregion all what needed for list
 
-#pragma region set
+#pragma region bool
 
 void ToBool(unsigned char* set, bool* universum) {
     for (size_t i = 0; set[i]; ++i) {
@@ -127,56 +177,58 @@ void PrintSet(bool* set) {
     }
 }
 
-#pragma endregion all what neded for set
-
-#pragma region bool
-
-bool isInSet(unsigned char item, unsigned char* set) {
-    for (size_t i = 0; set[i]; ++i) {
-        if (set[i] == item) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void DeleteItem(int index, unsigned char* set) {
-    for (size_t i = index; set[i]; ++i) {
-        set[i] = set[i + 1];
-    }
-}
-
-void AddItem(unsigned char item, unsigned char* set) {
-    size_t i;
-    for (i = 0; set[i]; ++i);
-    set[i] = item;
-    set[i + 1] = 0;
-}
-
-void UnionSets(unsigned char* source, unsigned char* destination) {
-    for (size_t i = 0; source[i]; ++i) {
-        if (!isInSet(source[i], destination)) {
-            AddItem(source[i], destination);
-        }
-    }
-}
-
-void ExclusionSets(unsigned char* source, unsigned char* destination) {
-    for (size_t i = 0; source[i]; ++i) {
-        if (isInSet(source[i], destination)) {
-            DeleteItem(i, destination);
-        }
-    }
-}
-
-void PrintSet(unsigned char* set) {
-    for (size_t i = 0; set[i]; ++i) {
-        cout << set[i];
-    }
-}
-
 #pragma endregion all what neded for bool
+
+#pragma region word
+
+int ToMachineWord(unsigned char* set) {
+    int mword = 0;
+    for (size_t i = 0; set[i]; ++i) {
+        mword = mword | ONE << (int)(set[i] - SHIFT);
+    }
+    return mword;
+}
+
+bool isInSet(int index, int mword) {
+    return mword & ONE << index;
+}
+
+int DeleteItem(int index, int mword) {
+    mword = mword & ~(ONE << index);
+    return mword;
+}
+
+int AddItem(int index, int mword) {
+    mword = mword | ONE << index;
+    return mword;
+}
+
+void UnionSets(int source, int& destination) {
+    for (size_t i = 0; i < LENOFLETTERS; ++i) {
+        if (isInSet(i, source)) {
+            destination = AddItem(i, destination);
+        }
+    }
+}
+
+void ExclusionSets(int source, int& destination) {
+    for (size_t i = 0; i < LENOFLETTERS; ++i) {
+        if (isInSet(i, source)) {
+            destination = DeleteItem(i , destination);
+        }
+    }
+}
+
+void PrintSet(int mword) {
+    int one = 1;
+    for (size_t i = 0; i < LENOFLETTERS; ++i) {
+        if (mword & one << i) {
+            cout << (unsigned char)(i + SHIFT);
+        }
+    }
+}
+
+#pragma endregion all what neded for word
 
 int main()
 {
@@ -201,6 +253,12 @@ int main()
     bool D_Bool[LENOFLETTERS] = { false };
     bool E_Bool[LENOFLETTERS] = { false };
 
+    int A_Mword = 0;
+    int B_Mword = 0;
+    int C_Mword = 0;
+    int D_Mword = 0;
+    int E_Mword = 0;
+
     cout << "Enter set A: ";
     cin >> A;
     cout << "Enter set B: ";
@@ -210,18 +268,18 @@ int main()
     cout << "Enter set D: ";
     cin >> D;
 
-    ToBool(A, A_Bool);
-    ToBool(B, B_Bool);
-    ToBool(C, C_Bool);
-    ToBool(D, D_Bool);
+    A_Mword = ToMachineWord(A);
+    B_Mword = ToMachineWord(B);
+    C_Mword = ToMachineWord(C);
+    D_Mword = ToMachineWord(D);
 
-    UnionSets(A_Bool, E_Bool);
-    ExclusionSets(B_Bool, E_Bool);
-    ExclusionSets(C_Bool, E_Bool);
-    ExclusionSets(D_Bool, E_Bool);
+    UnionSets(A_Mword, E_Mword);
+    ExclusionSets(B_Mword, E_Mword);
+    ExclusionSets(C_Mword, E_Mword);
+    ExclusionSets(D_Mword, E_Mword);
 
     cout << "Resulted set E: ";
-    PrintSet(E_Bool);
+    PrintSet(E_Mword);
 
     return 0;
 }
