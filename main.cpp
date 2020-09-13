@@ -243,6 +243,24 @@ int main()
     unsigned char D[LENOFLETTERS + 1];
     unsigned char E[LENOFLETTERS + 1] = {'\0'};
 
+    ST* A_List = nullptr;
+    ST* B_List = nullptr;
+    ST* C_List = nullptr;
+    ST* D_List = nullptr;
+    ST* E_List = nullptr;
+
+    bool A_Bool[LENOFLETTERS] = { false };
+    bool B_Bool[LENOFLETTERS] = { false };
+    bool C_Bool[LENOFLETTERS] = { false };
+    bool D_Bool[LENOFLETTERS] = { false };
+    bool E_Bool[LENOFLETTERS] = { false };
+
+    int A_Mword = 0;
+    int B_Mword = 0;
+    int C_Mword = 0;
+    int D_Mword = 0;
+    int E_Mword = 0;
+
     cout << "Choose type of memory: " << endl << "1. Array of values" << endl;
     cout  << "2. List of values" << endl << "3. Boolean array " << endl;
     cout << "4. Machine word" << endl;
@@ -275,12 +293,6 @@ int main()
         PrintSet(E);
         break;
     case '2':
-        ST * A_List = nullptr;
-        ST* B_List = nullptr;
-        ST* C_List = nullptr;
-        ST* D_List = nullptr;
-        ST* E_List = nullptr;
-
         A_List = ToList(A);
         B_List = ToList(B);
         C_List = ToList(C);
@@ -295,16 +307,8 @@ int main()
         cout << "Resulted set E: ";
         PrintSet(E_List);
 
-        delete A_List, B_List, C_List, D_List, E_List;
         break;
     case '3':
-        bool A_Bool[LENOFLETTERS] = { false };
-        bool B_Bool[LENOFLETTERS] = { false };
-        bool C_Bool[LENOFLETTERS] = { false };
-        bool D_Bool[LENOFLETTERS] = { false };
-        bool E_Bool[LENOFLETTERS] = { false };
-
-
         ToBool(A, A_Bool);
         ToBool(B, B_Bool);
         ToBool(C, C_Bool);
@@ -320,12 +324,6 @@ int main()
         PrintSet(E_Bool);
         break;
     case '4':
-        int A_Mword = 0;
-        int B_Mword = 0;
-        int C_Mword = 0;
-        int D_Mword = 0;
-        int E_Mword = 0;
-
         A_Mword = ToMachineWord(A);
         B_Mword = ToMachineWord(B);
         C_Mword = ToMachineWord(C);
