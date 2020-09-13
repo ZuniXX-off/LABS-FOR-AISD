@@ -294,6 +294,8 @@ int main()
 
         cout << "Resulted set E: ";
         PrintSet(E_List);
+
+        delete A_List, B_List, C_List, D_List, E_List;
         break;
     case '3':
         bool A_Bool[LENOFLETTERS] = { false };
