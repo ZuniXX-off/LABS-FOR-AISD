@@ -235,6 +235,8 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
+    unsigned char choose;
+
     unsigned char A[LENOFLETTERS + 1];
     unsigned char B[LENOFLETTERS + 1];
     unsigned char C[LENOFLETTERS + 1];
@@ -259,6 +261,17 @@ int main()
     int D_Mword = 0;
     int E_Mword = 0;
 
+    cout << "Choose type of memory: " << endl << "1. Array of values" << endl;
+    cout  << "2. List of values" << endl << "3. Boolean array " << endl;
+    cout << "4. Machine word" << endl;
+
+    do {
+        cin >> choose;
+        if (choose < '1' && choose > '4') {
+            cout << "Incorrect enter, try again" << endl;
+        }
+    } while (choose < '1' && choose > '4');
+
     cout << "Enter set A: ";
     cin >> A;
     cout << "Enter set B: ";
@@ -268,18 +281,63 @@ int main()
     cout << "Enter set D: ";
     cin >> D;
 
-    A_Mword = ToMachineWord(A);
-    B_Mword = ToMachineWord(B);
-    C_Mword = ToMachineWord(C);
-    D_Mword = ToMachineWord(D);
+    switch (choose) {
+    case '1':
+        UnionSets(A, E);
 
-    UnionSets(A_Mword, E_Mword);
-    ExclusionSets(B_Mword, E_Mword);
-    ExclusionSets(C_Mword, E_Mword);
-    ExclusionSets(D_Mword, E_Mword);
+        ExclusionSets(B, E);
+        ExclusionSets(C, E);
+        ExclusionSets(D, E);
 
-    cout << "Resulted set E: ";
-    PrintSet(E_Mword);
+        cout << "Resulted set E: ";
+        PrintSet(E);
+        break;
+    case '2':
+        A_List = ToList(A);
+        B_List = ToList(B);
+        C_List = ToList(C);
+        D_List = ToList(D);
+
+        E_List = UnionSets(A_List, E_List);
+
+        E_List = ExclusionSets(B_List, E_List);
+        E_List = ExclusionSets(C_List, E_List);
+        E_List = ExclusionSets(D_List, E_List);
+
+        cout << "Resulted set E: ";
+        PrintSet(E_List);
+        break;
+    case '3':
+        ToBool(A, A_Bool);
+        ToBool(B, B_Bool);
+        ToBool(C, C_Bool);
+        ToBool(D, D_Bool);
+
+        UnionSets(A_Bool, E_Bool);
+
+        ExclusionSets(B_Bool, E_Bool);
+        ExclusionSets(C_Bool, E_Bool);
+        ExclusionSets(D_Bool, E_Bool);
+
+        cout << "Resulted set E: ";
+        PrintSet(E_Bool);
+        break;
+    case '4':
+        A_Mword = ToMachineWord(A);
+        B_Mword = ToMachineWord(B);
+        C_Mword = ToMachineWord(C);
+        D_Mword = ToMachineWord(D);
+
+        UnionSets(A_Mword, E_Mword);
+
+        ExclusionSets(B_Mword, E_Mword);
+        ExclusionSets(C_Mword, E_Mword);
+        ExclusionSets(D_Mword, E_Mword);
+
+        cout << "Resulted set E: ";
+        PrintSet(E_Mword);
+        break;
+    }
 
     return 0;
 }
