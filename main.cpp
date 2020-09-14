@@ -101,9 +101,12 @@ ST* DeleteItem(unsigned char item, ST* set) {
                 tmp->next = x->next;
                 x->next = nullptr;
                 delete x;
+                x = nullptr;
             }
-            x = x->next;
-            tmp = tmp->next;
+            else {
+                x = x->next;
+                tmp = tmp->next;
+            }
         }
     }
     return set;
