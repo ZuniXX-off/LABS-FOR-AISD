@@ -42,8 +42,8 @@ void UnionSets(unsigned char* source, unsigned char* destination) {
 }
 
 void ExclusionSets(unsigned char* source, unsigned char* destination) {
-    for (size_t i = 0; source[i]; ++i) {
-        if (isInSet(source[i], destination)) {
+    for (size_t i = 0; destination[i]; ++i) {
+        if (isInSet(destination[i], source)) {
             DeleteItem(i, destination);
         }
     }
@@ -217,7 +217,7 @@ void UnionSets(int source, int& destination) {
 void ExclusionSets(int source, int& destination) {
     for (size_t i = 0; i < LENOFLETTERS; ++i) {
         if (isInSet(i, source)) {
-            destination = DeleteItem(i , destination);
+            destination = DeleteItem(i, destination);
         }
     }
 }
@@ -244,7 +244,7 @@ int main()
     unsigned char B[LENOFLETTERS + 1];
     unsigned char C[LENOFLETTERS + 1];
     unsigned char D[LENOFLETTERS + 1];
-    unsigned char E[LENOFLETTERS + 1] = {'\0'};
+    unsigned char E[LENOFLETTERS + 1] = { '\0' };
 
     ST* A_List = nullptr;
     ST* B_List = nullptr;
@@ -265,7 +265,7 @@ int main()
     int E_Mword = 0;
 
     cout << "Choose type of memory: " << endl << "1. Array of values" << endl;
-    cout  << "2. List of values" << endl << "3. Boolean array " << endl;
+    cout << "2. List of values" << endl << "3. Boolean array " << endl;
     cout << "4. Machine word" << endl;
 
     do {
